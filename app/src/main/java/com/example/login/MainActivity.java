@@ -9,6 +9,9 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.regex.Pattern;
+import java.util.regex.Matcher;
+
 public class MainActivity extends AppCompatActivity {
 
     EditText username, password, repassword;
@@ -35,7 +38,17 @@ public class MainActivity extends AppCompatActivity {
                 String pass = password.getText().toString();
                 String repass = repassword.getText().toString();
 
-                if(user.equals("") || pass.equals("") || repass.equals("")) {
+                // Defining the password pattern
+                String passwordPattern = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\W).{8,}$";
+
+                // Checking if the password matches the pattern
+                Pattern pattern = Pattern.compile(passwordPattern);
+                Matcher matcher = pattern.matcher(pass);
+
+                // Password validation
+                if (!matcher.matches()) {
+                    Toast.makeText(MainActivity.this, "Password must be at least 8 characters long and include a mix of uppercase letters, lowercase letters, and special characters", Toast.LENGTH_SHORT).show();
+                } else if(user.equals("") || pass.equals("") || repass.equals("")) {
                     Toast.makeText(MainActivity.this, "Please enter all the fields", Toast.LENGTH_SHORT).show();
                 } else {
                     if(pass.equals(repass)) {
