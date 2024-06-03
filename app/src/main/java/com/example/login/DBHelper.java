@@ -1,55 +1,63 @@
 package com.example.login;
 
-
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 import androidx.annotation.Nullable;
 
 public class DBHelper extends SQLiteOpenHelper {
     public static final String DBNAME = "Login.db";
+    private static final String TAG = "DBHelper";
+
     public DBHelper(Context context) {
-        super(context, "Login.db", null, 1);
+        super(context, DBNAME, null, 1);
     }
 
     @Override
     public void onCreate(SQLiteDatabase MyDB) {
-        MyDB.execSQL("create Table users(username TEXT primary key, password TEXT)");
+        MyDB.execSQL("CREATE TABLE users(username TEXT PRIMARY KEY, password TEXT, firstname TEXT, lastname TEXT, email TEXT, dob TEXT, phone TEXT)");
     }
 
     @Override
-    public void onUpgrade(SQLiteDatabase MyDB, int i, int i1) {
-        MyDB.execSQL("drop Table if exists users");
+    public void onUpgrade(SQLiteDatabase MyDB, int oldVersion, int newVersion) {
+        MyDB.execSQL("DROP TABLE IF EXISTS users");
+        onCreate(MyDB);
     }
 
-    public Boolean insertData(String username, String password){
+    public Boolean insertData(String firstname, String lastname, String username, String email, String dob, String phone, String password) {
         SQLiteDatabase MyDB = this.getWritableDatabase();
-        ContentValues contentValues= new ContentValues();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("firstname", firstname);
+        contentValues.put("lastname", lastname);
         contentValues.put("username", username);
+        contentValues.put("email", email);
+        contentValues.put("dob", dob);
+        contentValues.put("phone", phone);
         contentValues.put("password", password);
+
         long result = MyDB.insert("users", null, contentValues);
-        if(result==-1) return false;
-        else
+
+        if (result == -1) {
+            Log.e(TAG, "Failed to insert data");
+            return false;
+        } else {
+            Log.i(TAG, "Data inserted successfully");
             return true;
+        }
     }
 
     public Boolean checkusername(String username) {
         SQLiteDatabase MyDB = this.getWritableDatabase();
-        Cursor cursor = MyDB.rawQuery("Select * from users where username = ?", new String[]{username});
-        if (cursor.getCount() > 0)
-            return true;
-        else
-            return false;
+        Cursor cursor = MyDB.rawQuery("SELECT * FROM users WHERE username = ?", new String[]{username});
+        return cursor.getCount() > 0;
     }
 
-    public Boolean checkusernamepassword(String username, String password){
+    public Boolean checkusernamepassword(String username, String password) {
         SQLiteDatabase MyDB = this.getWritableDatabase();
-        Cursor cursor = MyDB.rawQuery("Select * from users where username = ? and password = ?", new String[] {username,password});
-        if(cursor.getCount()>0)
-            return true;
-        else
-            return false;
+        Cursor cursor = MyDB.rawQuery("SELECT * FROM users WHERE username = ? AND password = ?", new String[]{username, password});
+        return cursor.getCount() > 0;
     }
 }

@@ -8,23 +8,29 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
+import android.util.Log;
 
 public class MainActivity extends AppCompatActivity {
 
-    EditText username, password, repassword;
+    EditText username, password, repassword, firstname, lastname, email, phone, dob;
     Button signup;
     TextView signin;
     DBHelper DB;
+    private static final String TAG = "MainActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        firstname = findViewById(R.id.firstname);
+        lastname = findViewById(R.id.lastname);
         username = findViewById(R.id.username);
+        email = findViewById(R.id.email);
+        phone = findViewById(R.id.phone);
+        dob = findViewById(R.id.dob);
         password = findViewById(R.id.password);
         repassword = findViewById(R.id.repassword);
         signup = findViewById(R.id.btnsignup);
@@ -36,6 +42,11 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 String user = username.getText().toString();
                 String pass = password.getText().toString();
+                String fname = firstname.getText().toString();
+                String lname = lastname.getText().toString();
+                String mail = email.getText().toString();
+                String ph = phone.getText().toString();
+                String date = dob.getText().toString();
                 String repass = repassword.getText().toString();
 
                 // Defining the password pattern
@@ -48,25 +59,29 @@ public class MainActivity extends AppCompatActivity {
                 // Password validation
                 if (!matcher.matches()) {
                     Toast.makeText(MainActivity.this, "Password must be at least 8 characters long and include a mix of uppercase letters, lowercase letters, and special characters", Toast.LENGTH_SHORT).show();
-                } else if(user.equals("") || pass.equals("") || repass.equals("")) {
+                } else if (user.equals("") || pass.equals("") || repass.equals("") || fname.equals("") || lname.equals("") || mail.equals("") || ph.equals("") || date.equals("")) {
                     Toast.makeText(MainActivity.this, "Please enter all the fields", Toast.LENGTH_SHORT).show();
                 } else {
-                    if(pass.equals(repass)) {
+                    if (pass.equals(repass)) {
                         Boolean checkuser = DB.checkusername(user);
-                        if(!checkuser) {
-                            Boolean insert = DB.insertData(user, pass);
-                            if(insert) {
+                        if (!checkuser) {
+                            Boolean insert = DB.insertData(fname, lname, user, mail, date, ph, pass);
+                            if (insert) {
+                                Log.i(TAG, "User registered successfully: " + user);
                                 Toast.makeText(MainActivity.this, "Registered successfully", Toast.LENGTH_SHORT).show();
                                 Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
                                 intent.putExtra("username", user); // Passing the username
                                 startActivity(intent);
                             } else {
+                                Log.e(TAG, "Registration failed: insertData returned false");
                                 Toast.makeText(MainActivity.this, "Registration failed", Toast.LENGTH_SHORT).show();
                             }
                         } else {
-                            Toast.makeText(MainActivity.this, "User already exists! please sign in", Toast.LENGTH_SHORT).show();
+                            Log.w(TAG, "Username already taken: " + user);
+                            Toast.makeText(MainActivity.this, "User Name is taken, please try another.", Toast.LENGTH_SHORT).show();
                         }
                     } else {
+                        Log.w(TAG, "Passwords do not match for user: " + user);
                         Toast.makeText(MainActivity.this, "Passwords do not match", Toast.LENGTH_SHORT).show();
                     }
                 }
