@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp"
+    tools:context=".Subscriptions">
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Enter Amount"
+        android:textSize="24sp" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/usernameLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/username1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Amount " />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <GridLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:columnCount="2"
+        android:orientation="horizontal"
+        android:paddingTop="16dp">
+
+        <!-- Food -->
+        <Button
+            android:id="@+id/btnFood"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_columnWeight="1"
+            android:layout_margin="8dp"
+            android:background="@drawable/rounded_box"
+            android:drawableTop="@drawable/ic_baseline_fastfood_24"
+            android:gravity="center"
+            android:text="Food"
+            android:textColor="@android:color/black"
+            android:textSize="16sp" />
+
+        <!-- Rent -->
+        <Button
+            android:id="@+id/btnRent"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_columnWeight="1"
+            android:layout_margin="8dp"
+            android:background="@drawable/rounded_box"
+            android:drawableTop="@drawable/ic_baseline_directions_car_filled_24"
+            android:gravity="center"
+            android:text="Rent"
+            android:textColor="@android:color/black"
+            android:textSize="16sp" />
+
+        <!-- Shopping -->
+        <Button
+            android:id="@+id/btnShopping"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_columnWeight="1"
+            android:layout_margin="8dp"
+            android:background="@drawable/rounded_box"
+            android:drawableTop="@drawable/ic_baseline_account_balance_wallet_24"
+            android:gravity="center"
+            android:text="Shopping"
+            android:textColor="@android:color/black"
+            android:textSize="16sp" />
+
+        <!-- Utilities -->
+        <Button
+            android:id="@+id/btnUtilities"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_columnWeight="1"
+            android:layout_margin="8dp"
+            android:background="@drawable/rounded_box"
+            android:drawableTop="@drawable/ic_baseline_bakery_dining_24"
+            android:gravity="center"
+            android:text="Utilities"
+            android:textColor="@android:color/black"
+            android:textSize="16sp" />
+    </GridLayout>
+
+    <Button
+        android:id="@+id/btnSubmit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Submit" />
+
+</LinearLayout>

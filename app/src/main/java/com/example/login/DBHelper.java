@@ -55,6 +55,25 @@ public class DBHelper extends SQLiteOpenHelper {
         return cursor.getCount() > 0;
     }
 
+
+    public boolean insertSubscription(String amount, String category) {
+        SQLiteDatabase MyDB = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("amount", amount);
+        contentValues.put("category", category);
+
+        long result = MyDB.insert("subscriptions", null, contentValues);
+
+        return result != -1;
+    }
+
+
+    public Cursor getUserData(String username) {
+        SQLiteDatabase MyDB = this.getReadableDatabase();
+        return MyDB.rawQuery("SELECT * FROM user WHERE username = ?", new String[]{username});
+    }
+
+
     public Boolean checkusernamepassword(String username, String password) {
         SQLiteDatabase MyDB = this.getWritableDatabase();
         Cursor cursor = MyDB.rawQuery("SELECT * FROM user WHERE username = ? AND password = ?", new String[]{username, password});

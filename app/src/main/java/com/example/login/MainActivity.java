@@ -2,6 +2,7 @@ package com.example.login;
 
 import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -19,11 +20,30 @@ public class MainActivity extends AppCompatActivity {
     TextView signin;
     DBHelper DB;
     private static final String TAG = "MainActivity";
+    SharedPreferences sharedPreferences;
+    private static final String SHARED_PREF_NAME = "mypref";
+    private static final String KEY_USERNAME = "username";
+    private static final String KEY_IS_LOGGED_IN = "isLoggedIn";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        // Initialize SharedPreferences
+        sharedPreferences = getSharedPreferences(SHARED_PREF_NAME, MODE_PRIVATE);
+
+        // Check if user is already logged in
+        if (sharedPreferences.getBoolean(KEY_IS_LOGGED_IN, false)) {
+            String user = sharedPreferences.getString(KEY_USERNAME, null);
+            if (user != null) {
+                Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
+                intent.putExtra("username", user); // Passing the username
+                startActivity(intent);
+                finish();
+                return; // Return here to prevent running the rest of the code in onCreate
+            }
+        }
 
         firstname = findViewById(R.id.firstname);
         lastname = findViewById(R.id.lastname);
@@ -69,9 +89,17 @@ public class MainActivity extends AppCompatActivity {
                             if (insert) {
                                 Log.i(TAG, "User registered successfully: " + user);
                                 Toast.makeText(MainActivity.this, "Registered successfully", Toast.LENGTH_SHORT).show();
+
+                                // Save login state in SharedPreferences
+                                SharedPreferences.Editor editor = sharedPreferences.edit();
+                                editor.putBoolean(KEY_IS_LOGGED_IN, true);
+                                editor.putString(KEY_USERNAME, user);
+                                editor.apply();
+
                                 Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
                                 intent.putExtra("username", user); // Passing the username
                                 startActivity(intent);
+                                finish(); // Close the current activity
                             } else {
                                 Log.e(TAG, "Registration failed: insertData returned false");
                                 Toast.makeText(MainActivity.this, "Registration failed", Toast.LENGTH_SHORT).show();
