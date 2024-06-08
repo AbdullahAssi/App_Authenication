@@ -60,7 +60,6 @@ public class Account extends Fragment {
             welcome.setText("Welcome");
         }
 
-        // Setting up the logout button
         Button btnLogout = view.findViewById(R.id.btnlogout);
         btnLogout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -74,7 +73,7 @@ public class Account extends Fragment {
                 // Redirect to MainActivity
                 Intent intent = new Intent(getActivity(), MainActivity.class);
                 startActivity(intent);
-                getActivity().finish(); // Close the current activity
+                getActivity().finish();
             }
         });
 

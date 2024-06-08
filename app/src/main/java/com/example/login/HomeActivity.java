@@ -26,8 +26,6 @@ public class HomeActivity extends AppCompatActivity {
         // Getting the username from the Intent
         String username = getIntent().getStringExtra(KEY_USERNAME);
 
-
-
         // Initializing SharedPreferences
         sharedPreferences = getSharedPreferences(SHARED_PREF_NAME, MODE_PRIVATE);
 
